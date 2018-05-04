@@ -1,6 +1,10 @@
 var express = require("express");
+var bodyParser = require('body-parser');
 var app = express();
-var bodyParser = require('body-parser')
+
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 app.set("view engine", "ejs");
 app.set("views", "./views");
 app.listen(process.env.PORT || 3000);
@@ -9,17 +13,10 @@ app.get("/", function(req, res){
 	res.render("trangchu");
 });
 
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-app.post('/phimmoi', urlencodedParser, function (req, res) {
-  var mahoa = req.body.mahoa;
-  if (typeof Buffer.from === "function") {
-    // Node 5.10+
-    var buf = Buffer.from(mahoa, 'base64'); // Ta-da
-	} else {
-	    // older Node versions
-	    var buf = new Buffer(mahoa, 'base64'); // Ta-da
-	};
-  res.send(unpack(buf));
+app.post('/phimmoi',urlencodedParser, function (req, res) {
+  var mahoa_nhan = req.body.mahoa;
+  res.send(unpack(mahoa_nhan));
+
 });
 
 
