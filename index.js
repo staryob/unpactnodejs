@@ -14,9 +14,15 @@ app.get("/", function(req, res){
 });
 
 app.post('/phimmoi',urlencodedParser, function (req, res) {
-  var mahoa_nhan = req.body.mahoa;
-  res.send(unpack(mahoa_nhan));
-
+    var mahoa_nhan = req.body.mahoa;
+    if (typeof Buffer.from === "function") {
+    // Node 5.10+
+        var buf = Buffer.from(mahoa_nhan, 'base64'); // Ta-da
+    } else {
+        // older Node versions
+        var buf = new Buffer(mahoa_nhan, 'base64'); // Ta-da
+    }
+    res.send(unpack(buf));
 });
 
 
@@ -33,8 +39,6 @@ app.post('/phimmoi',urlencodedParser, function (req, res) {
     c=unescape(c);
     return c
 }
-
-
 
 
 function depack(p)
